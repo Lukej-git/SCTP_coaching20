@@ -1,0 +1,74 @@
+prometheus-node-exporter:
+  enabled: false
+kube-state-metrics:
+  enabled: false
+alertmanager:
+  enabled: true
+  persistence:
+    enabled: false
+  ingress:
+    enabled: true
+    className: nginx
+    hosts:
+      - host: group-1-alertmanager.sctp-sandbox.com
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    annotations:
+      external-dns.alpha.kubernetes.io/hostname: "group-1-alertmanager.sctp-sandbox.com"
+
+  config:
+    global:
+      resolve_timeout: 5m
+    route:
+      group_by: ["alertname"]
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 5m
+      receiver: "webhook"
+      routes:
+        - match:
+            severity: critical
+          receiver: "webhook"
+    receivers:
+      - name: "webhook"
+        webhook_configs:
+          - url: "https://webhook.site/ed644b43-5c6b-4609-87ac-7e582d5df5f8" # Replace with your webhook URL
+
+serverFiles:
+  alerting_rules.yml:
+    groups:
+      - name: node-alerts
+        rules:
+          - alert: HighCpuUsage
+            expr: up==1
+            for: 1m
+            labels:
+              severity: critical
+            annotations:
+              summary: "High CPU usage on {{ $labels.instance }}"
+              description: "CPU usage is above 80% on instance {{ $labels.instance }}."
+  prometheus.yml:
+    scrape_configs:
+      - job_name: prometheus
+        static_configs:
+          - targets:
+              - localhost:9090
+      - job_name: node-exporter
+        static_configs:
+          - targets:
+              - kube-prometheus-stack-prometheus-node-exporter.monitoring:9100
+      - job_name: nginx
+        static_configs:
+          - targets:
+              - ingress-nginx-controller-metrics.ingress-nginx:10254
+server:
+  persistentVolume:
+    enabled: false
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - group-1-prom.sctp-sandbox.com
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: "group-1-prom.sctp-sandbox.com"
