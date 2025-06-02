@@ -48,3 +48,4 @@ This is a divider above
 
 [![Repo](https://img.shields.io/badge/GitHub-View%20Repo-blue?logo=github)](https://github.com/aalimsee/ce-grp-1-vpc)
 
+[![Repo](https://img.shields.io/badge/GitHub-VPC%20Repo-orange?logo=github)](https://github.com/aalimsee/ce-grp-1-vpc)
