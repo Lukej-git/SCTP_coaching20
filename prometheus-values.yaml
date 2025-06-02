@@ -34,6 +34,20 @@ alertmanager:
       - name: "webhook"
         webhook_configs:
           - url: "https://webhook.site/ed644b43-5c6b-4609-87ac-7e582d5df5f8" # Replace with your webhook URL
+      - name: "email"
+        email_configs:
+        to: "lukejtz@gmail.com"
+        from: "lukejtz@gmail.com"
+        smarthost: "smtp.gmail.com:587"
+        hello: "gmail.com"
+        auth_username: "alertmanager@example.com" #your SMTP email add
+        auth_password: "your_smtp_password" #your SMTP Password USE KEY! DO NOT ADD DIRECTLY
+        require_tls: true
+        send_resolved: true
+        headers:
+          Subject: "[ALERT] {{ .CommonLabels.alertname }} triggered"
+        html: '{{ template "email.default.html" . }}'
+        text: '{{ template "email.default.txt" . }}'
 
 serverFiles:
   alerting_rules.yml:
