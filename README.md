@@ -43,3 +43,8 @@ adwd         awdawd
 ***
 
 This is a divider above
+
+[![Commit Activity](https://img.shields.io/github/commit-activity/m/aalimsee/ce-grp-1-vpc)](https://github.com/aalimsee/ce-grp-1-vpc/tree/main)
+
+[![Repo](https://img.shields.io/badge/GitHub-View%20Repo-blue?logo=github)](https://github.com/aalimsee/ce-grp-1-vpc)
+
